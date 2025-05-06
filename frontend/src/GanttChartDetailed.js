@@ -180,7 +180,7 @@ export default function GanttChartDetail() {
     const timelineWidth = timelineDays.length * dayWidth;
     const rowHeight = getRowHeight(row);
     const isMain = row.type === "main";
-    const barHeight = isMain ? rowHeight * 0.5 : rowHeight;
+    const barHeight = isMain ? rowHeight * 0.5 : rowHeight * 0.358;
     const barTop = isMain ? (rowHeight - barHeight) / 2 : 0;
     
     // Pilih segmen timeline berdasarkan tipe row:
