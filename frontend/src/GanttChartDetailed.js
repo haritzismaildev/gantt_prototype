@@ -176,10 +176,12 @@ export default function GanttChartDetail() {
   // • Untuk sub row, gunakan timeline spesifik dari subTask.
   // Progress bar dibagi menjadi dua bagian: achieved (sampai today) dan not achieved.
   // Tinggi bar: main row hanya 50% tinggi, sedangkan sub row mengisi 100%.
+  
   const renderProgressBarForRow = (row) => {
     const timelineWidth = timelineDays.length * dayWidth;
     const rowHeight = getRowHeight(row);
     const isMain = row.type === "main";
+
     const barHeight = isMain ? rowHeight * 0.5 : rowHeight * 0.358;
     const barTop = isMain ? (rowHeight - barHeight) / 2 : 0;
     
@@ -202,6 +204,7 @@ export default function GanttChartDetail() {
     
     // Tentukan warna bar: untuk main row, gunakan warna dari subTask pertama;
     // untuk sub row, gunakan warna dari subTask itu sendiri.
+    // const barColor = row.type === "main" ? row.task.subTasks[0].color : row.subTask.color;
     const barColor = row.type === "main" ? row.task.subTasks[0].color : row.subTask.color;
     
     return (
@@ -245,14 +248,23 @@ export default function GanttChartDetail() {
     <div className="gantt-chart-container">
       {/* Header Proyek dan Tab Navigasi */}
       <div className="project-header">
-        <h1>Product Launch</h1>
-        <div className="project-status">On Track</div>
+        <h1><td>Product Launch</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td>
+        <select id="status_project" name='status_project'>
+          <option value="On Track">On Track</option>
+          <option value="At Risk">At Risk</option>
+          <option value="Off Track">Off Track</option>
+        </select>
+          </td></h1>
+        {/* <div className="project-status">On Track</div> */}
       </div>
+      
+      {/* this is for the tabs refference */}
       <div className="project-tabs">
         {["Gantt Chart", "Board", "List", "Calendar", "Workload", "People", "Dashboard"].map((tab, idx) => (
           <button key={idx} className="tab-btn">{tab}</button>
         ))}
       </div>
+      
       {/* Kontrol Zoom */}
       <div className="chart-controls">
         <div className="zoom-controls">
@@ -260,6 +272,7 @@ export default function GanttChartDetail() {
           <button onClick={() => setZoom(z => Math.max(z - 10, 20))}>Zoom Out</button>
         </div>
       </div>
+      
       <div className="gantt-chart-grid">
         {/* Panel Kiri: Task Name & Assigned (PIC hanya tampil di row sub) */}
         <div className="gantt-left-panel">
