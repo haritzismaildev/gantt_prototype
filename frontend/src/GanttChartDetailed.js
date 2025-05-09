@@ -13,35 +13,23 @@ export default function GanttChartDetail() {
   // Base height dinamis: 4% dari tinggi layar (minimal 30px)
   const baseHeight = typeof window !== "undefined" ? Math.max(30, window.innerHeight * 0.04) : 40;
   
-  // Zoom: menentukan lebar per hari (dalam piksel)
   const [zoom, setZoom] = useState(80);
   const dayWidth = zoom;
 
-  // Timeline: dari tanggal "2025-06-04" sampai "2025-06-30"
   const timelineStart = new Date("2025-06-04");
   const timelineEnd   = new Date("2025-06-30");
   const todayDate = new Date("2025-06-15");
 
-  // Fungsi untuk menghitung selisih hari antara dua tanggal
   const diffDays = (start, end) => {
     const msPerDay = 1000 * 60 * 60 * 24;
     return Math.round((end - start) / msPerDay);
   };
 
-  // Array tanggal untuk header timeline (setiap tanggal dari timelineStart sampai timelineEnd)
   const timelineDays = [];
   for (let d = new Date(timelineStart); d <= timelineEnd; d.setDate(d.getDate() + 1)) {
     timelineDays.push(new Date(d));
   }
 
-  // Data dummy: 3 task (task name) dengan masing-masing 3 sub task.
-  // Tiap sub task memiliki properti: subTaskName, start, end, assignedTo, dan color.
-  // Pola assignment PIC pada task 1:
-  // • Subtask 1.1: PIC 1  
-  // • Subtask 1.2: PIC 2 dan PIC 4  
-  // • Subtask 1.3: PIC 3 dan PIC 5  
-  // Pola yang sama juga diterapkan untuk task 2 dan task 3,
-  // dengan perbedaan tanggal start-end sehingga progress bar mereka berbeda.
   const [tasks, setTasks] = useState([]);
   useEffect(() => {
     const dummyTasks = [
@@ -151,8 +139,6 @@ export default function GanttChartDetail() {
     setTasks(dummyTasks);
   }, []);
 
-  // Bangun array 'rows' dari tasks.
-  // Untuk setiap task, buat satu row untuk main task dan satu row untuk tiap sub task.
   const rows = [];
   tasks.forEach(task => {
     // Main row: hitung timeline gabungan dari semua sub task (min start dan max end)
@@ -166,17 +152,8 @@ export default function GanttChartDetail() {
     });
   });
 
-  // Fungsi untuk mendapatkan tinggi row:
-  // • Main row: baseHeight (digunakan sebagai acuan bar utama yang akan digambar setinggi 50% row)
-  // • Sub row: 3 kali baseHeight
   const getRowHeight = (row) => row.type === "main" ? baseHeight : baseHeight * 3;
 
-  // Fungsi renderProgressBarForRow:
-  // • Untuk main row, gunakan timeline gabungan (dari minimal subTask start hingga maksimal subTask end).
-  // • Untuk sub row, gunakan timeline spesifik dari subTask.
-  // Progress bar dibagi menjadi dua bagian: achieved (sampai today) dan not achieved.
-  // Tinggi bar: main row hanya 50% tinggi, sedangkan sub row mengisi 100%.
-  
   const renderProgressBarForRow = (row) => {
     const timelineWidth = timelineDays.length * dayWidth;
     const rowHeight = getRowHeight(row);
