@@ -236,11 +236,11 @@ export default function GanttChartDetail() {
       </div>
       
       {/* this is for the tabs refference */}
-      <div className="project-tabs">
+      {/* <div className="project-tabs">
         {["Gantt Chart", "Board", "List", "Calendar", "Workload", "People", "Dashboard"].map((tab, idx) => (
           <button key={idx} className="tab-btn">{tab}</button>
         ))}
-      </div>
+      </div> */}
       
       {/* Kontrol Zoom */}
       <div className="chart-controls">
